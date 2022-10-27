@@ -53,7 +53,7 @@ const CloseAccOperation = props => {
       <Input
         input={{
           type: 'password',
-          maxlength: '6',
+          maxLength: '6',
           className: `${classes['form__input']}`,
         }}
       />
