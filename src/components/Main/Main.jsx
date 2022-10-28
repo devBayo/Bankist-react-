@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import AuthContext from '../../contexts/auth-context';
+import UsersContext from '../../contexts/users-context';
 import classes from './Main.module.css';
 
 import MainHeader from './MainHeader/MainHeader';
@@ -9,12 +9,12 @@ import Summary from './Summary/Summary';
 import Timer from './Timer/Timer';
 
 const Main = () => {
-  const authContext = useContext(AuthContext);
+  const usersContext = useContext(UsersContext);
 
   return (
     <main
       className={`${classes.main} ${
-        authContext.isLoggedIn ? classes['signed-in'] : ''
+        usersContext.isLoggedIn ? classes['signed-in'] : ''
       }`}
     >
       <MainHeader />
