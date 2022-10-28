@@ -71,7 +71,6 @@ const userReducer = (state, action) => {
   if (action.type === 'LOGIN') {
     const user = state.users.find(user => user.username === action.username);
     if (!user || user?.pin !== action.pin) return { ...state };
-    console.log(user);
     return {
       ...state,
       user,
@@ -88,9 +87,8 @@ const userReducer = (state, action) => {
   }
 
   if (action.type === 'TRANSFER') {
-    const user = state.user;
+    let user = state.user;
     const { recepient, amount } = action;
-    console.log(user);
 
     // checks if recepient exist
     const recepientExists = state.users.some(
@@ -152,7 +150,13 @@ const userReducer = (state, action) => {
     const user = state.user;
 
     if (user.username === action.username && user.pin === action.pin) {
-      return { ...state, user: '', isLoggedIn: false };
+      const updatedUsers = [...state.users];
+      const userIndex = state.users.findIndex(
+        user_ => user_.username === user.username
+      );
+      updatedUsers.splice(userIndex, 1);
+
+      return { ...state, users: updatedUsers, user: '', isLoggedIn: false };
     } else {
       return { ...state };
     }
