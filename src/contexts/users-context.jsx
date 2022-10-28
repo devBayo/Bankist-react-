@@ -4,7 +4,7 @@ const UsersContext = React.createContext({
   users: [],
   user: '',
   isLoggedIn: '',
-  login: () => {},
+  login: (username, pin) => {},
   logout: () => {},
   transfer: (recepient, amount) => {},
   requestLoan: amount => {},
@@ -61,17 +61,19 @@ const userReducer = (state, action) => {
     });
 
     return {
+      ...state,
       users: updatedUsers,
-      user: updatedUsers[0], // test
-      isLoggedIn: true,
+      //user: updatedUsers[0], // test
+      //isLoggedIn: true,
     };
   }
 
   if (action.type === 'LOGIN') {
-    const user = state.users[0];
+    const user = state.users.find(user => user.username === action.username);
+    if (!user || user?.pin !== action.pin) return { ...state };
     console.log(user);
     return {
-      users: state.users,
+      ...state,
       user,
       isLoggedIn: true,
     };
@@ -174,8 +176,8 @@ export const UsersContextProvider = props => {
     dispatchUser({ type: 'INIT' });
   }, []);
 
-  const login = (username, password) => {
-    dispatchUser({ type: 'LOGIN', username, password });
+  const login = (username, pin) => {
+    dispatchUser({ type: 'LOGIN', username, pin });
   };
 
   const logout = () => {
