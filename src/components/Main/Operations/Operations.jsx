@@ -1,5 +1,6 @@
 import Input from '../../UI/Input';
 import OperationForm from './OperationForm';
+import OperationIcon from './OperationIcon';
 import classes from './Operations.module.css';
 
 const TransferOperation = props => {
@@ -17,7 +18,9 @@ const TransferOperation = props => {
           className: `${classes['form__input']}`,
         }}
       />
-      <button className={classes['form__btn']}>&rarr;</button>
+      <button className={classes['form__btn']}>
+        <OperationIcon />
+      </button>
       <label className={classes['form__label']}>Transfer to</label>
       <label className={classes['form__label']}>Amount</label>
     </OperationForm>
@@ -33,7 +36,9 @@ const LoanOperation = props => {
           className: `${classes['form__input']}`,
         }}
       />
-      <button className={`${classes['form__btn']}`}>&rarr;</button>
+      <button className={`${classes['form__btn']}`}>
+        <OperationIcon />
+      </button>
       <label></label>
       <label className={`${classes['form__label']}`}>Amount</label>
     </OperationForm>
@@ -58,7 +63,9 @@ const CloseAccOperation = props => {
         }}
       />
 
-      <button className={`${classes['form__btn']}`}>&rarr;</button>
+      <button className={`${classes['form__btn']}`}>
+        <OperationIcon />
+      </button>
       <label className={classes['form__label']}>Confirm user</label>
       <label className={classes['form__label']}>Confirm PIN</label>
     </OperationForm>
