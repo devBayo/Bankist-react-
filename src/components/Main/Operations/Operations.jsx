@@ -1,24 +1,39 @@
+import { useContext, useRef } from 'react';
 import Input from '../../UI/Input';
 import OperationForm from './OperationForm';
 import OperationIcon from './OperationIcon';
 import classes from './Operations.module.css';
+import UsersContext from '../../../contexts/users-context';
 
 const TransferOperation = props => {
+  const usersContext = useContext(UsersContext);
+  const recepientInputRef = useRef();
+  const amountInputRef = useRef();
+
+  const onTransferHandler = event => {
+    event.preventDefault();
+    const recepient = recepientInputRef.current.value;
+    const amount = +amountInputRef.current.value;
+    usersContext.transfer(recepient, amount);
+  };
+
   return (
     <OperationForm type="transfer" formTitle="Transfer money">
       <Input
+        ref={recepientInputRef}
         input={{
           type: 'text',
           className: `${classes['form__input']}`,
         }}
       />
       <Input
+        ref={amountInputRef}
         input={{
           type: 'number',
           className: `${classes['form__input']}`,
         }}
       />
-      <button className={classes['form__btn']}>
+      <button onClick={onTransferHandler} className={classes['form__btn']}>
         <OperationIcon />
       </button>
       <label className={classes['form__label']}>Transfer to</label>
