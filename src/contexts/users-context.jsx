@@ -120,15 +120,29 @@ const userReducer = (state, action) => {
 
       updatedUsers[userIndex] = user;
       updatedUsers[recepientIndex] = recepientInState;
-      return {
-        ...state,
-        users: updatedUsers,
-        user,
-      };
+      return { ...state, users: updatedUsers, user };
     } else {
       // console.log('Err');
       return { ...state };
     }
+  }
+
+  if (action.type === 'LOAN') {
+    const user = state.user;
+    const { amount } = action;
+
+    // checks if loan can be granted
+    const isApproved = amount > 0;
+    console.log(isApproved);
+
+    if (!isApproved) return { ...state };
+    const updatedUsers = [...state.users];
+    const userIndex = state.users.findIndex(
+      user_ => user_.username === user.username
+    );
+    user.movements.unshift(amount);
+    updatedUsers[userIndex] = user;
+    return { ...state, users: updatedUsers, user };
   }
 
   return {
