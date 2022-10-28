@@ -1,28 +1,23 @@
+import { useContext } from 'react';
+import UsersContext from '../../../contexts/users-context';
+import MovementItem from './MovementItem';
 import classes from './Movements.module.css';
 
-const Movements = props => {
-  return (
-    <div className={classes['movements']}>
-      <div className={classes['movements__row']}>
-        <div
-          className={`${classes['movements__type']} ${classes['movements__type--withdrawal']}`}
-        >
-          1 withdrawal
-        </div>
-        <div className={classes['movements__date']}>24/01/2037</div>
-        <div className={classes['movements__value']}>-378€</div>
-      </div>
+const Movements = () => {
+  const {
+    user: { movements },
+  } = useContext(UsersContext);
 
-      <div className={classes['movements__row']}>
-        <div
-          className={`${classes['movements__type']} ${classes['movements__type--deposit']}`}
-        >
-          2 deposit
-        </div>
-        <div className={classes['movements__date']}>3 days ago</div>
-        <div className={classes['movements__value']}>4 000€</div>
-      </div>
-    </div>
+  return (
+    <ul className={classes['movements']}>
+      {movements?.map((movement, i) => {
+        const type = movement > 0 ? 'deposit' : 'withdrawal';
+
+        return (
+          <MovementItem key={i} index={i + 1} type={type} value={movement} />
+        );
+      })}
+    </ul>
   );
 };
 
