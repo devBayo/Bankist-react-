@@ -1,6 +1,20 @@
+import { useContext } from 'react';
+import UsersContext from '../../../contexts/users-context';
 import classes from './Summary.module.css';
 
-const Summary = props => {
+const Summary = () => {
+  const {
+    user: { movements },
+  } = useContext(UsersContext);
+
+  const deposit = movements?.filter(movement => movement > 0);
+  const totalDeposit = deposit?.reduce((prev, cur) => prev + cur, 0).toFixed(2);
+
+  const withdrawal = movements?.filter(movement => movement < 0);
+  const totalWithdrawal = Math.abs(
+    withdrawal?.reduce((prev, cur) => prev + cur, 0)
+  ).toFixed(2);
+
   return (
     <div className={classes['summary']}>
       <p className={classes['summary__label']}>In</p>
@@ -9,7 +23,7 @@ const Summary = props => {
         ${classes['summary__value--in']}
       `}
       >
-        0000€
+        {totalDeposit}€
       </p>
       <p className={classes['summary__label']}>Out</p>
       <p
@@ -17,7 +31,7 @@ const Summary = props => {
         ${classes['summary__value--out']}
       `}
       >
-        0000€
+        {totalWithdrawal}€
       </p>
       <p className={classes['summary__label']}>Interest</p>
       <p
