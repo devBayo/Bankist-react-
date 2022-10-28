@@ -10,7 +10,7 @@ const TransferOperation = props => {
   const recepientInputRef = useRef();
   const amountInputRef = useRef();
 
-  const onTransferHandler = event => {
+  const transferHandler = event => {
     event.preventDefault();
     const recepient = recepientInputRef.current.value;
     const amount = +amountInputRef.current.value;
@@ -33,7 +33,7 @@ const TransferOperation = props => {
           className: `${classes['form__input']}`,
         }}
       />
-      <button onClick={onTransferHandler} className={classes['form__btn']}>
+      <button onClick={transferHandler} className={classes['form__btn']}>
         <OperationIcon />
       </button>
       <label className={classes['form__label']}>Transfer to</label>
@@ -43,15 +43,28 @@ const TransferOperation = props => {
 };
 
 const LoanOperation = props => {
+  const loanAmountInputRef = useRef();
+  const usersContext = useContext(UsersContext);
+
+  const requestLoanHandler = event => {
+    event.preventDefault();
+    const loanAmount = +loanAmountInputRef.current.value;
+    usersContext.requestLoan(loanAmount);
+  };
+
   return (
     <OperationForm type="loan" formTitle="Request loan">
       <Input
+        ref={loanAmountInputRef}
         input={{
           type: 'number',
           className: `${classes['form__input']}`,
         }}
       />
-      <button className={`${classes['form__btn']}`}>
+      <button
+        onClick={requestLoanHandler}
+        className={`${classes['form__btn']}`}
+      >
         <OperationIcon />
       </button>
       <label></label>
