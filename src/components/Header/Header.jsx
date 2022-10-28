@@ -1,14 +1,19 @@
 import classes from './Header.module.css';
 import logo from '../../assets/logo.png';
 import Input from '../UI/Input';
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import UsersContext from '../../contexts/users-context';
 
 const Header = () => {
   const { isLoggedIn, user, login, logout } = useContext(UsersContext);
-  const onLoginHandler = event => {
+  const usernameInputRef = useRef();
+  const pinInputRef = useRef();
+
+  const loginHandler = event => {
     event.preventDefault();
-    login();
+    const username = usernameInputRef.current.value;
+    const pin = +pinInputRef.current.value;
+    login(username, pin);
   };
 
   return (
@@ -24,8 +29,9 @@ const Header = () => {
           isLoggedIn ? classes['signed-in'] : ''
         }`}
       >
-        <form onSubmit={onLoginHandler} className={classes['login']}>
+        <form onSubmit={loginHandler} className={classes['login']}>
           <Input
+            ref={usernameInputRef}
             input={{
               type: 'text',
               placeholder: 'user',
@@ -36,6 +42,7 @@ const Header = () => {
           />
 
           <Input
+            ref={pinInputRef}
             input={{
               type: 'text',
               placeholder: 'PIN',
