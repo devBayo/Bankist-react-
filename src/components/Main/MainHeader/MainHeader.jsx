@@ -4,8 +4,10 @@ import classes from './MainHeader.module.css';
 
 const MainHeader = () => {
   const {
-    user: { balance },
+    user: { movements },
   } = useContext(UsersContext);
+
+  const balance = movements?.reduce((prev, cur) => prev + cur, 0);
 
   return (
     <div className={classes['balance']}>
