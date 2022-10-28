@@ -1,6 +1,12 @@
+import { useContext } from 'react';
+import UsersContext from '../../../contexts/users-context';
 import classes from './MainHeader.module.css';
 
-const MainHeader = props => {
+const MainHeader = () => {
+  const {
+    user: { balance },
+  } = useContext(UsersContext);
+
   return (
     <div className={classes['balance']}>
       <div>
@@ -9,7 +15,7 @@ const MainHeader = props => {
           As of <span className={['date']}>05/03/2037</span>
         </p>
       </div>
-      <p className={classes['balance__value']}>0000€</p>
+      <p className={classes['balance__value']}>{balance?.toFixed(2)}€</p>
     </div>
   );
 };
