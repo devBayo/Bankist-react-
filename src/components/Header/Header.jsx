@@ -2,21 +2,29 @@ import classes from './Header.module.css';
 import logo from '../../assets/logo.png';
 import Input from '../UI/Input';
 import { useContext } from 'react';
-import AuthContext from '../../contexts/auth-context';
+import UsersContext from '../../contexts/users-context';
 
 const Header = () => {
-  const authContext = useContext(AuthContext);
+  const { isLoggedIn, user, login, logout } = useContext(UsersContext);
+  const onLoginHandler = event => {
+    event.preventDefault();
+    login();
+  };
 
   return (
     <nav>
-      <p className={classes['welcome']}>Log in to get started</p>
+      <p className={classes['welcome']}>
+        {isLoggedIn
+          ? `Welcome back, ${user.owner.slice(0, user.owner.indexOf(' '))} `
+          : 'Log in to get started'}
+      </p>
       <img src={logo} alt="Logo" className={classes.logo} />
       <div
         className={`${classes['auth']} ${
-          authContext.isLoggedIn ? classes['signed-in'] : ''
+          isLoggedIn ? classes['signed-in'] : ''
         }`}
       >
-        <form className={classes['login']}>
+        <form onSubmit={onLoginHandler} className={classes['login']}>
           <Input
             input={{
               type: 'text',
@@ -37,9 +45,11 @@ const Header = () => {
               `,
             }}
           />
-          <button className={classes['login__btn']}>&rarr;</button>
+          <button type="submit" className={classes['login__btn']}>
+            &rarr;
+          </button>
         </form>
-        <button className={classes['logout']}>
+        <button onClick={logout} className={classes['logout']}>
           Logout
           <svg
             xmlns="http://www.w3.org/2000/svg"
