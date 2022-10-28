@@ -8,6 +8,7 @@ const UsersContext = React.createContext({
   logout: () => {},
   transfer: (recepient, amount) => {},
   requestLoan: amount => {},
+  closeAccount: (username, pin) => {},
 });
 
 export default UsersContext;
@@ -78,7 +79,7 @@ const userReducer = (state, action) => {
 
   if (action.type === 'LOGOUT') {
     return {
-      users: state.users,
+      ...state,
       user: '',
       isLoggedIn: false,
     };
@@ -145,6 +146,16 @@ const userReducer = (state, action) => {
     return { ...state, users: updatedUsers, user };
   }
 
+  if (action.type === 'CLOSE_ACCOUNT') {
+    const user = state.user;
+
+    if (user.username === action.username && user.pin === action.pin) {
+      return { ...state, user: '', isLoggedIn: false };
+    } else {
+      return { ...state };
+    }
+  }
+
   return {
     users: DUMMY_USERS,
     user: '',
@@ -179,6 +190,10 @@ export const UsersContextProvider = props => {
     dispatchUser({ type: 'LOAN', amount });
   };
 
+  const closeAccount = (username, pin) => {
+    dispatchUser({ type: 'CLOSE_ACCOUNT', username, pin });
+  };
+
   return (
     <UsersContext.Provider
       value={{
@@ -189,6 +204,7 @@ export const UsersContextProvider = props => {
         logout,
         transfer,
         requestLoan,
+        closeAccount,
       }}
     >
       {props.children}
