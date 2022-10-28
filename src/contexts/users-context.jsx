@@ -6,13 +6,15 @@ const UsersContext = React.createContext({
   isLoggedIn: '',
   login: () => {},
   logout: () => {},
+  transfer: (recepient, amount) => {},
+  requestLoan: amount => {},
 });
 
 export default UsersContext;
 
 const user1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
+  movements: [200, 455.23, -306.5, 25000],
   interestRate: 1.2, // %
   pin: 1111,
 
@@ -20,10 +22,6 @@ const user1 = {
     '2019-11-18T21:31:17.178Z',
     '2019-12-23T07:42:02.383Z',
     '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2022-06-16T17:01:17.194Z',
-    '2022-06-18T23:36:17.929Z',
     '2022-06-19T10:51:36.790Z',
   ],
   currency: 'EUR',
@@ -32,16 +30,12 @@ const user1 = {
 
 const user2 = {
   owner: 'Jessica Davis',
-  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  movements: [5000, 3400, -790, -3210],
   interestRate: 1.5,
   pin: 2222,
 
   movementsDates: [
     '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
     '2020-04-10T14:43:26.374Z',
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
@@ -61,13 +55,10 @@ const userReducer = (state, action) => {
         (user.username = user.owner
           .split(' ')
           .map(name => name[0].toLowerCase())
-          .join('')),
-        // Logic for total balance
-        (user.balance = user.movements.reduce((prev, cur) => prev + cur, 0))
+          .join(''))
       );
     });
 
-    console.log(updatedUsers);
     return {
       users: updatedUsers,
       user: updatedUsers[0], // test
@@ -94,7 +85,50 @@ const userReducer = (state, action) => {
   }
 
   if (action.type === 'TRANSFER') {
-    console.log('Approving transfer');
+    const user = state.user;
+    const { recepient, amount } = action;
+    console.log(user);
+
+    // checks if recepient exist
+    const recepientExists = state.users.some(
+      user => user.username === recepient
+    );
+    const userBalance = user.movements.reduce((prev, cur) => prev + cur, 0);
+
+    // Validate transfer
+    if (
+      recepientExists &&
+      recepient !== user.username &&
+      amount > 0 &&
+      amount <= userBalance
+    ) {
+      const updatedUsers = [...state.users];
+
+      const recepientInState = state.users.find(
+        user => user.username === recepient
+      );
+
+      const recepientIndex = state.users.findIndex(
+        user => user.username === recepient
+      );
+
+      const userIndex = state.users.findIndex(
+        user_ => user_.username === user.username
+      );
+      user.movements.unshift(-amount);
+      recepientInState.movements.unshift(amount);
+
+      updatedUsers[userIndex] = user;
+      updatedUsers[recepientIndex] = recepientInState;
+      return {
+        ...state,
+        users: updatedUsers,
+        user,
+      };
+    } else {
+      // console.log('Err');
+      return { ...state };
+    }
   }
 
   return {
@@ -127,6 +161,10 @@ export const UsersContextProvider = props => {
     dispatchUser({ type: 'TRANSFER', recepient, amount });
   };
 
+  const requestLoan = amount => {
+    dispatchUser({ type: 'LOAN', amount });
+  };
+
   return (
     <UsersContext.Provider
       value={{
@@ -136,6 +174,7 @@ export const UsersContextProvider = props => {
         login,
         logout,
         transfer,
+        requestLoan,
       }}
     >
       {props.children}
