@@ -1,7 +1,7 @@
 import classes from './Header.module.css';
 import logo from '../../assets/logo.png';
 import Input from '../UI/Input';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import UsersContext from '../../contexts/users-context';
 
 const Header = () => {
@@ -15,6 +15,10 @@ const Header = () => {
     const pin = +pinInputRef.current.value;
     login(username, pin);
   };
+
+  useEffect(() => {
+    usernameInputRef.current.value = pinInputRef.current.value = '';
+  }, [user]);
 
   return (
     <nav>
