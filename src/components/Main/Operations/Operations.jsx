@@ -74,9 +74,21 @@ const LoanOperation = props => {
 };
 
 const CloseAccOperation = props => {
+  const usernameInputRef = useRef();
+  const pinInputRef = useRef();
+  const usersContext = useContext(UsersContext);
+
+  const closeAccountHandler = event => {
+    event.preventDefault();
+    const username = usernameInputRef.current.value;
+    const pin = +pinInputRef.current.value;
+    usersContext.closeAccount(username, pin);
+  };
+
   return (
     <OperationForm type="close" formTitle="Close account">
       <Input
+        ref={usernameInputRef}
         input={{
           type: 'text',
           className: `${classes['form__input']}`,
@@ -84,6 +96,7 @@ const CloseAccOperation = props => {
       />
 
       <Input
+        ref={pinInputRef}
         input={{
           type: 'password',
           maxLength: '6',
@@ -91,7 +104,10 @@ const CloseAccOperation = props => {
         }}
       />
 
-      <button className={`${classes['form__btn']}`}>
+      <button
+        onClick={closeAccountHandler}
+        className={`${classes['form__btn']}`}
+      >
         <OperationIcon />
       </button>
       <label className={classes['form__label']}>Confirm user</label>
