@@ -1,13 +1,21 @@
 import classes from './Header.module.css';
 import logo from '../../assets/logo.png';
 import Input from '../UI/Input';
+import { useContext } from 'react';
+import AuthContext from '../../contexts/auth-context';
 
 const Header = () => {
+  const authContext = useContext(AuthContext);
+
   return (
     <nav>
       <p className={classes['welcome']}>Log in to get started</p>
       <img src={logo} alt="Logo" className={classes.logo} />
-      <div className={classes['auth']}>
+      <div
+        className={`${classes['auth']} ${
+          authContext.isLoggedIn ? classes['signed-in'] : ''
+        }`}
+      >
         <form className={classes['login']}>
           <Input
             input={{
