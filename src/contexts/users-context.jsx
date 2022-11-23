@@ -96,7 +96,7 @@ const userReducer = (state, action) => {
     );
     const userBalance = user.movements.reduce((prev, cur) => prev + cur, 0);
 
-    // Validate transfer
+    //// Validate transfer
     if (
       recepientExists &&
       recepient !== user.username &&
