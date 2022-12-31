@@ -4,7 +4,9 @@ import classes from './Summary.module.css';
 
 const Summary = () => {
   const {
-    user: { movements },
+    state: {
+      user: { movements },
+    },
   } = useContext(UsersContext);
 
   const deposit = movements?.filter(movement => movement > 0);

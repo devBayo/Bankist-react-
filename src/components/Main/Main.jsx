@@ -9,13 +9,13 @@ import Summary from './Summary/Summary';
 import Timer from './Timer/Timer';
 
 const Main = () => {
-  const usersContext = useContext(UsersContext);
+  const {
+    state: { isLoggedIn },
+  } = useContext(UsersContext);
 
   return (
     <main
-      className={`${classes.main} ${
-        usersContext.isLoggedIn ? classes['signed-in'] : ''
-      }`}
+      className={`${classes.main} ${isLoggedIn ? classes['signed-in'] : ''}`}
     >
       <MainHeader />
       <Movements />

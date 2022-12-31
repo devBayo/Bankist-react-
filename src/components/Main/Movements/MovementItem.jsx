@@ -8,7 +8,7 @@ const MovementItem = props => {
           classes[`movements__type--${props.type}`]
         }`}
       >
-        {props.index} {props.type}
+        {props.type}
       </div>
       <div className={classes['movements__date']}></div>
       {/* <div className={classes['movements__date']}>24/01/2037</div> */}

@@ -1,6 +1,6 @@
 import React from 'react';
-const Input = React.forwardRef((props, ref) => {
-  return <input ref={ref} {...props.input} />;
-});
+const Input = ({ input, onChange }) => {
+  return <input onChange={onChange} {...input} />;
+};
 
 export default Input;

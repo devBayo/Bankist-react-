@@ -5,7 +5,9 @@ import classes from './Movements.module.css';
 
 const Movements = () => {
   const {
-    user: { movements },
+    state: {
+      user: { movements },
+    },
   } = useContext(UsersContext);
 
   return (

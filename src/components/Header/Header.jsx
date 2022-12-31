@@ -1,24 +1,37 @@
 import classes from './Header.module.css';
 import logo from '../../assets/logo.png';
 import Input from '../UI/Input';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useState } from 'react';
 import UsersContext from '../../contexts/users-context';
 
 const Header = () => {
-  const { isLoggedIn, user, login, logout } = useContext(UsersContext);
-  const usernameInputRef = useRef();
-  const pinInputRef = useRef();
+  const [input, setInput] = useState({
+    username: '',
+    pin: '',
+  });
+
+  const {
+    dispatch,
+    state: { isLoggedIn, user },
+  } = useContext(UsersContext);
+
+  const inputChangeHandler = event => {
+    setInput(prevState => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
 
   const loginHandler = event => {
     event.preventDefault();
-    const username = usernameInputRef.current.value;
-    const pin = +pinInputRef.current.value;
-    login(username, pin);
+    console.log(input.pin, input.username);
+    dispatch({ type: 'LOGIN', username: input.username, pin: input.pin });
+    setInput({ username: '', pin: '' });
   };
 
-  useEffect(() => {
-    usernameInputRef.current.value = pinInputRef.current.value = '';
-  }, [user]);
+  const logoutHandler = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
 
   return (
     <nav>
@@ -35,9 +48,11 @@ const Header = () => {
       >
         <form onSubmit={loginHandler} className={classes['login']}>
           <Input
-            ref={usernameInputRef}
+            onChange={inputChangeHandler}
             input={{
+              value: input.username,
               type: 'text',
+              name: 'username',
               placeholder: 'user',
               className: `${classes['login__input']}
               ${classes['login__input--user']}
@@ -46,9 +61,11 @@ const Header = () => {
           />
 
           <Input
-            ref={pinInputRef}
+            onChange={inputChangeHandler}
             input={{
+              value: input.pin,
               type: 'text',
+              name: 'pin',
               placeholder: 'PIN',
               maxLength: '4',
               className: `${classes['login__input']}
@@ -60,7 +77,7 @@ const Header = () => {
             &rarr;
           </button>
         </form>
-        <button onClick={logout} className={classes['logout']}>
+        <button onClick={logoutHandler} className={classes['logout']}>
           Logout
           <svg
             xmlns="http://www.w3.org/2000/svg"

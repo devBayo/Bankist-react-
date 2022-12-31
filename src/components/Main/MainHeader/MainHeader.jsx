@@ -4,7 +4,9 @@ import classes from './MainHeader.module.css';
 
 const MainHeader = () => {
   const {
-    user: { movements },
+    state: {
+      user: { movements },
+    },
   } = useContext(UsersContext);
 
   const balance = movements?.reduce((prev, cur) => prev + cur, 0);
